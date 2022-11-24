@@ -201,8 +201,9 @@ class Player:
 
 class Game:
 
-    def __init__(self, players):
+    def __init__(self, players, starting_player=0):
         self.players = players
+        self.starting_player = starting_player
         self.is_reversed = False
         self.deck = Deck()
 
@@ -211,6 +212,7 @@ class Game:
 
     def play(self):
         player_id = np.arange(self.num_players)
+        player_id = np.roll(player_id, -self.starting_player)
         while not self.deck.is_empty():
             current_player = self.players[player_id[0]]
 
