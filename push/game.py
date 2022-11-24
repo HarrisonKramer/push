@@ -185,6 +185,9 @@ class Game:
         self.is_reversed = False
         self.deck = Deck()
 
+        if self.num_players < 2 or self.num_players > 6:
+            raise ValueError('Number of players must be between 2-6.')
+
     def play(self):
         player_id = np.arange(self.num_players)
         while not self.deck.is_empty():
