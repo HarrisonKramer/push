@@ -240,7 +240,6 @@ class Game:
                     winner = k
 
             logging.info('Player {} wins!'.format(winner))
-
             logging.info(f'Number of cards: {num_cards}')
 
         logging.info(f'Scores: {self.score}')
