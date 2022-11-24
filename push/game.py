@@ -110,10 +110,11 @@ class PileGroup:
 
 class Player:
 
-    def __init__(self, name='', card_draw_limit=10, card_min_draw=5):
+    def __init__(self, name='', card_draw_limit=10, card_min_draw=5, bank_threshold=10):
         self.name = name
         self.card_draw_limit = card_draw_limit
         self.card_min_draw = card_min_draw
+        self.bank_threshold = bank_threshold
         self.cards = []
 
     def create_piles(self, deck):
@@ -164,10 +165,30 @@ class Player:
         color = roll_die()
         self.discard_color(color)
 
-    def bank_cards(self, color):
+    def bank_cards(self):
+        color = self.max_stack_color
         for card in self.cards:
             if card.color == color:
                 card.is_banked = True
+
+    @property
+    def max_stack_color(self):
+        points = self.num_points_per_color()
+        return max(points, key=points.get)
+
+    @property
+    def has_bankable_color(self):
+        points = self.num_points_per_color()
+        return max(points.values()) >= self.bank_threshold
+
+    def num_points_per_color(self):
+        colors = ['red', 'purple', 'yellow', 'blue', 'green']
+        values = [0, 0, 0, 0, 0]
+        points = {k: v for k, v in zip(colors, values)}
+        for card in self.cards:
+            if not card.is_banked:
+                points[card.color] += card.number
+        return points
 
     @property
     def sum_cards(self):
@@ -194,6 +215,11 @@ class Game:
             current_player = self.players[player_id[0]]
 
             logging.info(f'Player {player_id[0]} starts their turn')
+
+            if current_player.has_bankable_color:
+                logging.info(f'Player {player_id[0]} banks')
+                current_player.bank_cards()
+                continue
 
             is_reversed, pushed_too_far, piles = current_player.create_piles(self.deck)
 
