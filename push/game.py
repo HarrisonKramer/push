@@ -221,6 +221,7 @@ class Game:
             if current_player.has_bankable_color:
                 logging.info(f'Player {player_id[0]} banks')
                 current_player.bank_cards()
+                player_id = np.roll(player_id, -1)
                 continue
 
             is_reversed, pushed_too_far, piles = current_player.create_piles(self.deck)
