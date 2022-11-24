@@ -3,7 +3,7 @@
 ## Introduction
 This package provides a simple simulation environment for the card game [PUSH](https://boardgamegeek.com/boardgame/265256/push).
 
-## Examples
+## Example
 ```python
 from push.game import Player, Game
 
