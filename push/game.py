@@ -118,6 +118,7 @@ class Player:
         self.cards = []
 
     def create_piles(self, deck):
+        logging.info('Player begins creating piles')
         number_of_cards = random.randint(self.card_min_draw, self.card_draw_limit)
 
         is_reversed = False
