@@ -110,16 +110,19 @@ class PileGroup:
 
 class Player:
 
-    def __init__(self, name='', card_draw_limit=10, card_min_draw=5, bank_threshold=10):
+    def __init__(self, name='', card_draw_limit=10, card_draw_min=5, bank_threshold=10):
+        if card_draw_min > card_draw_limit:
+            raise ValueError('Card draw limit must be larger than card draw minimum.')
+
         self.name = name
         self.card_draw_limit = card_draw_limit
-        self.card_min_draw = card_min_draw
+        self.card_draw_min = card_draw_min
         self.bank_threshold = bank_threshold
         self.cards = []
 
     def create_piles(self, deck):
         logging.info('Player begins creating piles')
-        number_of_cards = random.randint(self.card_min_draw, self.card_draw_limit)
+        number_of_cards = random.randint(self.card_draw_min, self.card_draw_limit)
 
         is_reversed = False
         pushed_too_far = False
