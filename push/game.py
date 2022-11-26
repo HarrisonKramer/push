@@ -14,6 +14,12 @@ class Card:
     def __str__(self):
         return f'{self.type}, {self.color}, {self.number}'
 
+    def __eq__(self, card):
+        if not isinstance(card, Card):
+            return NotImplemented
+
+        return self.type == card.type and self.color == card.color and self.number == card.number
+
 
 def roll_die():
     colors = ['red', 'purple', 'yellow', 'blue', 'green', 'black']
@@ -77,6 +83,12 @@ class Pile:
     def add_card(self, card_to_add):
         self.cards.append(card_to_add)
 
+    def contains(self, other_card):
+        for card in self.cards:
+            if card == other_card:
+                return True
+        return False
+
 
 class PileGroup:
 
@@ -84,8 +96,12 @@ class PileGroup:
         if piles is None:
             self.piles = [Pile() for __ in range(3)]
 
-    def valid_addition(self, pile_index, card_to_add):
-        return self.piles[pile_index].valid_addition(card_to_add)
+    def valid_addition(self, card_to_add):
+        valid = False
+        for pile in self.piles:
+            if pile.valid_addition(card_to_add):
+                valid = True
+        return valid
 
     def add_card(self, pile_index, card_to_add):
         self.piles[pile_index].add_card(card_to_add)
